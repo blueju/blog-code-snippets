@@ -1,19 +1,36 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="https://vuejs.org/images/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <img alt="Vue logo" src="./assets/logo.png" />
+  <!-- <HelloWorld msg="Hello Vue 3 in CodeSandbox!" /> -->
+  <hr />
+  <button @click="downloadPrint">下载并打印</button>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+// import HelloWorldVue from "./components/HelloWorld.vue";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    // HelloWorld: HelloWorldVue,
+  },
+  methods: {
+    downloadPrint() {
+      fetch("./这是一个PDF.pdf")
+        .then((res) => res.blob())
+        .then((resBlob) => {
+          const src = URL.createObjectURL(resBlob);
+          let iframe = document.createElement("iframe");
+          iframe.setAttribute("id", "print-container");
+          iframe.style.display = "none";
+          iframe.setAttribute("src", src);
+          document.body.appendChild(iframe);
+          setTimeout(function () {
+            iframe.contentWindow.print();
+            URL.revokeObjectURL(src);
+          }, 0);
+        });
+    },
+  },
+};
 </script>
 
 <style>
